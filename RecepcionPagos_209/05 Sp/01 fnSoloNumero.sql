@@ -1,0 +1,27 @@
+SET DATEFIRST 7
+SET ANSI_NULLS OFF
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SET LOCK_TIMEOUT -1
+SET QUOTED_IDENTIFIER OFF
+SET CONCAT_NULL_YIELDS_NULL OFF
+SET ARITHABORT OFF
+SET ANSI_WARNINGS OFF
+GO
+
+/**************** fnSoloNumero ****************/
+IF NOT object_id('dbo.fnSoloNumero') IS NULL DROP FUNCTION dbo.fnSoloNumero
+GO
+CREATE FUNCTION dbo.fnSoloNumero(@Folio varchar(1000))
+RETURNS VARCHAR(1000)
+BEGIN
+  DECLARE @Numero INT
+  SET @Numero = PATINDEX('%[^0-9]%',@Folio)
+  WHILE @Numero > 0
+   BEGIN
+    SET @Folio = STUFF(@Folio,@Numero,1,'')
+    SET @Numero = PATINDEX('%[^0-9]%',@Folio)
+   END
+  RETURN @Folio
+END
+GO
+
